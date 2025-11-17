@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MicroSkill — Learn in 10–15min</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- TOPBAR (logout + reset + theme) -->
+    <header class="topbar">
+      <div class="brand">MicroSkill</div>
+      <div class="top-controls">
+        <button id="themeToggle" class="icon">🌙</button>
+        <button id="logoutBtn" class="icon">🔒 Logout</button>
+        <button id="hardResetBtn" class="icon danger">🗑 Reset</button>
+      </div>
+    </header>
+
+    <!-- LOGIN SCREEN -->
+    <main id="loginScreen" class="screen center">
+      <div class="card auth">
+        <h1>Welcome to MicroSkill</h1>
+        <p>Learn a short skill daily — in 10–15 minutes.</p>
+        <input id="nameInput" placeholder="Enter your name" />
+        <div class="row">
+          <button id="startBtn" class="btn primary">Start</button>
+          <button id="guestBtn" class="btn outline">Continue as Guest</button>
+        </div>
+        <small class="muted">All progress is stored locally in your browser.</small>
+      </div>
+    </main>
+
+    <!-- APP SCREEN -->
+    <main id="appScreen" class="screen hidden">
+      <section class="layout">
+
+        <!-- LEFT: lesson -->
+        <div class="left-col">
+          <div class="card user-panel">
+            <div>
+              <div class="welcome">Hello, <span id="userName">You</span> 👋</div>
+              <div class="muted">Prefs: <span id="userPrefs">All</span></div>
+            </div>
+            <div class="stats">
+              <div><strong id="learnedCount">0</strong><div class="muted">learned</div></div>
+              <div><strong id="streakCount">0</strong><div class="muted">streak</div></div>
+            </div>
+          </div>
+
+          <div id="lessonCard" class="card lesson">
+            <div class="lesson-head">
+              <div>
+                <h2 id="skillTitle">Skill of the Day</h2>
+                <div class="meta">
+                  <span id="skillCat" class="badge">Category</span>
+                  <span id="skillDiff" class="badge">Beginner</span>
+                  <span id="skillTime" class="badge">10 min</span>
+                </div>
+              </div>
+              <div class="controls">
+                <button id="shuffleBtn" class="btn">🔀 Shuffle</button>
+                <button id="saveFavBtn" class="btn outline">♡ Save</button>
+              </div>
+            </div>
+
+            <!-- tabs -->
+            <div class="tabs">
+              <button class="tab active" data-tab="tabOverview">📘 Overview</button>
+              <button class="tab" data-tab="tabSteps">🪜 Steps</button>
+              <button class="tab" data-tab="tabTip">💡 Pro Tip</button>
+              <button class="tab" data-tab="tabChallenge">🎯 Challenge</button>
+            </div>
+
+            <div class="tab-contents">
+              <div id="tabOverview" class="tab-content active"></div>
+              <div id="tabSteps" class="tab-content"></div>
+              <div id="tabTip" class="tab-content"></div>
+              <div id="tabChallenge" class="tab-content"></div>
+            </div>
+
+            <div class="lesson-foot">
+              <div>
+                <button id="startTimerBtn" class="btn small">⏱ Start 10-min Timer</button>
+                <div id="timerWrap" class="timer hidden">
+                  <div id="timerText">10:00</div>
+                  <div class="progress"><div id="timerBar" style="width:0%"></div></div>
+                </div>
+              </div>
+              <div>
+                <button id="markLearnedBtn" class="btn primary">✅ Mark as Learned</button>
+                <button id="openLibraryBtn" class="btn outline small">📚 Library</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card small">
+            <strong>Daily Quote</strong>
+            <div id="quoteText" class="muted">Consistency compounds — start today.</div>
+          </div>
+        </div>
+
+        <!-- RIGHT: prefs + library quick -->
+        <aside class="right-col">
+          <div class="card">
+            <h3>Preferences</h3>
+            <div class="prefs">
+              <label><input type="checkbox" class="prefCat" value="Tech"> Tech</label>
+              <label><input type="checkbox" class="prefCat" value="Fitness"> Fitness</label>
+              <label><input type="checkbox" class="prefCat" value="Life"> Life</label>
+              <label><input type="checkbox" class="prefCat" value="Cooking"> Cooking</label>
+              <label><input type="checkbox" class="prefCat" value="Creative"> Creative</label>
+              <label><input type="checkbox" class="prefCat" value="Career"> Career</label>
+            </div>
+            <div class="muted">Difficulty:
+              <select id="prefDifficulty">
+                <option value="Any">Any</option>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Your Library</h3>
+            <div id="quickLibrary">No skills learned yet.</div>
+            <div class="row">
+              <button id="viewLibraryBtn" class="btn small">View Library</button>
+              <button id="clearLibraryBtn" class="btn outline small">Clear</button>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <!-- LIBRARY SCREEN (full) -->
+    <div id="libraryScreen" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-head">
+          <button id="libBackBtn" class="btn small">⬅ Back</button>
+          <h3>My Library</h3>
+          <div class="modal-actions">
+            <button id="exportBtn" class="btn small">Export CSV</button>
+            <button id="closeLibraryBtn" class="btn outline small">Close</button>
+          </div>
+        </div>
+        <div id="libraryList" class="library-list"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS modal (close fixed) -->
+    <div id="settingsModal" class="modal hidden">
+      <div class="modal-card">
+        <h3>Settings</h3>
+        <label><input id="confettiToggle" type="checkbox"> Enable confetti on level up</label>
+        <label><input id="quoteToggle" type="checkbox"> Show daily quote</label>
+        <div class="row right">
+          <button id="closeSettingsBtn" class="btn outline small">Close</button>
+          <button id="hardResetSettingsBtn" class="btn danger small">Reset Website</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <footer class="footer">Made with ♥ — MicroSkill</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
